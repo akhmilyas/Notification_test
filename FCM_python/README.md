@@ -5,7 +5,7 @@
 - Запустить venv `source venv/bin/activate`
 - Установить зависимости `pip install -r requirements.txt`
 - Добавить голый ключ FCM в файл user_token
-- Положить файл service-accout.json
+- Положить файл service-account.json
 - Запустить `python3 message.py`
 
 Отключить venv `deactivate`
