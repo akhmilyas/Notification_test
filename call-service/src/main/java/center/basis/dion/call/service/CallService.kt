@@ -41,9 +41,7 @@ class CallService : Service() {
     }
 
     private fun showIncomingCall(info: IncomingCallInfo) {
-        val channelId = getString(R.string.default_notification_channel_id)
-        notificationManager.createNotificationChannel(
-            channelId = channelId,
+        val channelId = notificationManager.getCallNotificationChannel(
             channelNameRes = R.string.incoming_call_notification_channel,
         )
 
@@ -56,7 +54,7 @@ class CallService : Service() {
             .addAction(callServiceDependencies.getAcceptCallAction(this))
             .setSmallIcon(R.drawable.ic_phone)
             // TODO можно раскомментировать чтобы посмотреть как будет вести себя при заблокированном экране
-//            .setFullScreenIntent(callServiceDependencies.getIncomingCallPendingIntent(this), true)
+            .setFullScreenIntent(callServiceDependencies.getIncomingCallPendingIntent(this), true)
             .setPriority(NotificationManagerCompat.IMPORTANCE_MAX)
             .build()
 
