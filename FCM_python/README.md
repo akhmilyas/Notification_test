@@ -1,5 +1,6 @@
 # Инструкция  
 
+- Необходимо находится в папке FCM_python
 - Установить venv `python3 -m venv venv` 
 - Запустить venv `source venv/bin/activate`
 - Установить зависимости `pip install -r requirements.txt`
