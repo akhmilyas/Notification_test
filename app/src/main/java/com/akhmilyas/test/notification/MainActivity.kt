@@ -69,11 +69,11 @@ class MainActivity : AppCompatActivity() {
     private fun handleToken() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
-                Log.w(Companion.TAG, "Fetching FCM registration token failed", task.exception)
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
                 return@addOnCompleteListener
             }
             val token = task.result
-            Log.d(Companion.TAG, token)
+            Log.d(TAG, token)
             binding.fcmKey.text = token
         }
     }
@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity() {
 
         private fun getIntent(context: Context, action: String) = Intent(context, MainActivity::class.java).apply {
             this.action = action
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
 
         fun getIncomingCallPendingIntent(context: Context): PendingIntent = PendingIntent.getActivity(
