@@ -40,8 +40,8 @@ class IncomingCallAudioManager @Inject constructor(
                 .build()
             am.requestAudioFocus(focusRequest)
             try {
-                val notificationUri: String = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE).toString()
-                ringtonePlayer.setDataSource(context, Uri.parse(notificationUri))
+                val notificationUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+                ringtonePlayer.setDataSource(context, notificationUri)
                 ringtonePlayer.prepareAsync()
             } catch (e: Exception) {
                 ringtonePlayer.release()
