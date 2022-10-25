@@ -53,7 +53,6 @@ class CallService : Service() {
             .addAction(CallBroadcastReceiver.getDismissAction(this))
             .addAction(callServiceDependencies.getAcceptCallAction(this))
             .setSmallIcon(R.drawable.ic_phone)
-            // TODO можно раскомментировать чтобы посмотреть как будет вести себя при заблокированном экране
             .setFullScreenIntent(callServiceDependencies.getIncomingCallPendingIntent(this), true)
             .setPriority(NotificationManagerCompat.IMPORTANCE_MAX)
             .build()
