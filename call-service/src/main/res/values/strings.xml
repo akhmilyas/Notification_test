@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_notification_channel_id">1</string>
+    <string name="fcm_message">У вас новый звонок</string>
+    <string name="incoming_call_notification_channel">Входящие звонки</string>
+    <string name="text_accept_call_notification">Принять</string>
+    <string name="text_dismiss_call_notification">Отменить</string>
+    <string name="text_notification_content_title_conference_with_name">Вам поступил звонок от %s</string>
+</resources>
