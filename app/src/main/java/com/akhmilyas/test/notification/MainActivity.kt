@@ -38,10 +38,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        turnScreenOnAndKeyguardOff()
+        processIntent(intent)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        processIntent(intent)
 
         binding.fcmKey.setOnClickListener {
             val clipboard: ClipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
@@ -91,9 +90,11 @@ class MainActivity : AppCompatActivity() {
                 text = "Звонок принят, заходим в конференцию"
             }
             CallState.ProcessInternal.Dismissed -> {
+                disableScreenOnAndKeyguardOff()
                 text = "Звонок отменен"
             }
             CallState.Inactive -> {
+                disableScreenOnAndKeyguardOff()
                 text = "Ничего не происходит"
             }
         }
@@ -108,9 +109,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun processIntent(intent: Intent?) {
         when (intent?.action) {
-            INCOMING_CALL_ACCEPT -> {
-                callInteractor.onAction(CallAction.AcceptCall)
-            }
+            INCOMING_CALL_ACCEPT -> callInteractor.onAction(CallAction.AcceptCall)
+            INCOMING_CALL_RINGING -> turnScreenOnAndKeyguardOff()
         }
     }
 
@@ -172,5 +172,17 @@ fun Activity.turnScreenOnAndKeyguardOff() {
 
     with(getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager) {
         requestDismissKeyguard(this@turnScreenOnAndKeyguardOff, null)
+    }
+}
+
+fun Activity.disableScreenOnAndKeyguardOff() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+        setShowWhenLocked(false)
+        setTurnScreenOn(false)
+    } else {
+        window.clearFlags(
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                    or WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON
+        )
     }
 }
