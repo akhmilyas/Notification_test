@@ -1,5 +1,6 @@
 package center.basis.dion.call.service
 
+import android.app.Notification
 import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo
@@ -21,8 +22,10 @@ class CallService : Service() {
 
     @Inject
     lateinit var notificationManager: DeviceNotificationManager
+
     @Inject
     lateinit var audioManager: IncomingCallAudioManager
+
     @Inject
     lateinit var callServiceDependencies: CallServiceDependencies
 
@@ -45,17 +48,7 @@ class CallService : Service() {
             channelNameRes = R.string.incoming_call_notification_channel,
         )
 
-        val notification = NotificationCompat.Builder(this, channelId)
-            .setContentTitle(info.name)
-            .setContentText(getString(R.string.text_notification_content_title_conference_with_name, info.name))
-            .setCategory(NotificationCompat.CATEGORY_CALL)
-            .setContentIntent(callServiceDependencies.getIncomingCallPendingIntent(this))
-            .addAction(CallBroadcastReceiver.getDismissAction(this))
-            .addAction(callServiceDependencies.getAcceptCallAction(this))
-            .setSmallIcon(R.drawable.ic_phone)
-            .setFullScreenIntent(callServiceDependencies.getIncomingCallPendingIntent(this), true)
-            .setPriority(NotificationManagerCompat.IMPORTANCE_MAX)
-            .build()
+        val notification = getNotification(channelId, info.name)
 
         notificationManager.showNotification(
             INCOMING_CALL_NOTIFICATION_ID,
@@ -79,6 +72,19 @@ class CallService : Service() {
             CallState.Ringing(info)
         }
     }
+
+    private fun getNotification(channelId: String, name: String): Notification =
+        NotificationCompat.Builder(this, channelId)
+            .setContentTitle(name)
+            .setContentText(getString(R.string.text_notification_content_title_conference_with_name, name))
+            .setCategory(NotificationCompat.CATEGORY_CALL)
+            .setContentIntent(callServiceDependencies.getIncomingCallPendingIntent(this))
+            .addAction(CallBroadcastReceiver.getDismissAction(this))
+            .addAction(callServiceDependencies.getAcceptCallAction(this))
+            .setSmallIcon(R.drawable.ic_phone)
+            .setFullScreenIntent(callServiceDependencies.getIncomingCallPendingIntent(this), true)
+            .setPriority(NotificationManagerCompat.IMPORTANCE_MAX)
+            .build()
 
     private fun startAudioAndVibrate() {
         audioManager.startRinging()
